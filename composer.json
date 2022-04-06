@@ -1,0 +1,16 @@
+{
+    "name": "pts/shopfront-sdk",
+    "description": "This package contains SDK connector for Shopfront",
+    "type": "library",
+    "version": "1.0.0",
+    "require": {
+        "php": "^7.4 || ^8.0",
+        "ext-json": "*",
+        "guzzlehttp/guzzle": "^7.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "ShopfrontSDK\\": "src/"
+        }
+    }
+}

@@ -89,7 +89,7 @@ class ShopfrontConnector
         $resp = $this->client->sendRequest($req);
         $body = (string) $resp->getBody();
 
-        if ($resp->getStatusCode() >= 300){
+        if ($resp->getStatusCode() >= 300) {
             throw new HttpException($resp->getStatusCode(), $body);
         }
         if (!$body) {

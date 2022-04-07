@@ -27,11 +27,11 @@ class ShopfrontConnector
         $this->client = new \GuzzleHttp\Client();
     }
 
-    public function getSales(string $timestamp = ''): array
+    public function getSales(array $options): array
     {
         $uri = self::SALES_URL;
-        if ($timestamp != ''){
-            $uri .= '?dateFrom=' . $timestamp;
+        if (sizeof($options)) {
+            $uri .= '?' . http_build_query($options);
         }
         $request = $this->buildRequest($uri);
         return $this->execute($request);

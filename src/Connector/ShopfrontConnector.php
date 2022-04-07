@@ -4,7 +4,6 @@ namespace ShopfrontSDK\Connector;
 
 use ShopfrontSDK\Model\Ambassador;
 use ShopfrontSDK\Model\Level;
-use ShopfrontSDK\Model\LevelClearance;
 use GuzzleHttp\Psr7\Request;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestInterface;
@@ -12,24 +11,23 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class ShopfrontConnector
 {
-    const SALES_URL = '/api/plumtree/sales';
-    const AMBASSADORS_URL = '/api/plumtree/ambassadors';
+    const SALES_URL = '/rest/all/V2/shopfront/sales';
+    const AMBASSADORS_URL = '/rest/all/V2/shopfront/customers';
 
     private ClientInterface $client;
 
     public function __construct(
-        private string $drupalHost,
-        private string $drupalApiKey,
-    )
-    {
+        private string $host,
+        private string $apiKey,
+    ) {
         $this->client = new \GuzzleHttp\Client();
     }
 
     public function getSales(string $timestamp = ''): array
     {
         $uri = self::SALES_URL;
-        if($timestamp != ''){
-            $uri .= '?dateFrom='.$timestamp;
+        if ($timestamp != ''){
+            $uri .= '?dateFrom=' . $timestamp;
         }
         $request = $this->buildRequest($uri);
         return $this->execute($request);
@@ -38,49 +36,49 @@ class ShopfrontConnector
     public function createAmbassador(Ambassador $ambassador): void
     {
         $uri = self::AMBASSADORS_URL;
-        $request = $this->buildRequest($uri, 'POST', $ambassador);
+        $request = $this->buildRequest($uri, 'POST', ['customer' => $ambassador]);
         $this->execute($request);
     }
 
-    public function activateAmbassador(string $ambasadorId): void
-    {
-        $uri = self::AMBASSADORS_URL."/$ambasadorId/activate";
-        $request = $this->buildRequest($uri, 'POST');
-        $this->execute($request);
-    }
+    // public function activateAmbassador(string $ambasadorId): void
+    // {
+    //     $uri = self::AMBASSADORS_URL . "/$ambasadorId/activate";
+    //     $request = $this->buildRequest($uri, 'POST');
+    //     $this->execute($request);
+    // }
 
     public function setLevel(string $ambasadorId, Level $level): void
     {
-        $uri = self::AMBASSADORS_URL."/$ambasadorId/levels";
+        $uri = self::AMBASSADORS_URL . "/$ambasadorId/levels";
         $request = $this->buildRequest($uri, 'POST', $level);
         $this->execute($request);
     }
 
-    public function clearLevels(LevelClearance $lc): void
+    public function clearLevels(string $ambassadorId): void
     {
-        $uri = self::AMBASSADORS_URL."/levels/clear";
-        $request = $this->buildRequest($uri, 'POST', $lc);
+        $uri = self::AMBASSADORS_URL . "/$ambassadorId/levels";
+        $request = $this->buildRequest($uri, 'POST', ['level' => Level::LEVEL_1]);
         $this->execute($request);
     }
 
-    public function patchEmail(Ambassador $ambassador, string $newEmail)
-    {
-        $uri = self::AMBASSADORS_URL;
-        $body = [
-            'email' => $ambassador->email,
-            'newEmail' => $newEmail
-        ];
-        $request = $this->buildRequest($uri, 'PATCH', $body);
-        $this->execute($request);
-    }
+    // public function patchEmail(Ambassador $ambassador, string $newEmail)
+    // {
+    //     $uri = self::AMBASSADORS_URL;
+    //     $body = [
+    //         'email' => $ambassador->email,
+    //         'newEmail' => $newEmail
+    //     ];
+    //     $request = $this->buildRequest($uri, 'PATCH', $body);
+    //     $this->execute($request);
+    // }
 
     protected function buildRequest(string $path, string $method = 'GET', $body = null): RequestInterface
     {
-        if ($body){
+        if ($body) {
             $body = json_encode($body);
         }
-        $request = (new Request(method: $method, uri: $this->drupalHost.$path, body: $body))
-                    ->withAddedHeader('Authorization', 'Bearer '.$this->drupalApiKey);
+        $request = (new Request(method: $method, uri: $this->host . $path, body: $body))
+                    ->withAddedHeader('Authorization', 'Bearer ' . $this->apiKey);
         return $request;
     }
 

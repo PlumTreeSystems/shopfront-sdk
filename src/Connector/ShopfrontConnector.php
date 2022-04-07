@@ -44,13 +44,6 @@ class ShopfrontConnector
         $this->execute($request);
     }
 
-    // public function activateAmbassador(string $ambasadorId): void
-    // {
-    //     $uri = self::AMBASSADORS_URL . "/$ambasadorId/activate";
-    //     $request = $this->buildRequest($uri, 'POST');
-    //     $this->execute($request);
-    // }
-
     public function setLevel(string $ambasadorId, Level $level): void
     {
         $uri = self::AMBASSADORS_URL . "/$ambasadorId/levels";
@@ -58,10 +51,10 @@ class ShopfrontConnector
         $this->execute($request);
     }
 
-    public function clearLevels(string $ambassadorId): void
+    public function clearLevels(): void
     {
-        $uri = self::AMBASSADORS_URL . "/$ambassadorId/levels";
-        $request = $this->buildRequest($uri, 'POST', ['level' => Level::LEVEL_1]);
+        $uri = self::AMBASSADORS_URL . "/clear-levels";
+        $request = $this->buildRequest($uri, 'POST');
         $this->execute($request);
     }
 
@@ -71,7 +64,7 @@ class ShopfrontConnector
         $body = [
             'email' => $newEmail
         ];
-        $request = $this->buildRequest($uri , 'PUT', ['customer' => $body]);
+        $request = $this->buildRequest($uri, 'PUT', ['customer' => $body]);
         $this->execute($request);
     }
 
@@ -86,7 +79,8 @@ class ShopfrontConnector
             [],
             $body
         ))
-            ->withAddedHeader('Authorization', 'Bearer ' . $this->apiKey);
+            ->withAddedHeader('Authorization', 'Bearer ' . $this->apiKey)
+            ->withAddedHeader('Content-Type', 'application/json');
         return $request;
     }
 

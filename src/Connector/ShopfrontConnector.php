@@ -65,16 +65,15 @@ class ShopfrontConnector
         $this->execute($request);
     }
 
-    // public function patchEmail(Ambassador $ambassador, string $newEmail)
-    // {
-    //     $uri = self::AMBASSADORS_URL;
-    //     $body = [
-    //         'email' => $ambassador->email,
-    //         'newEmail' => $newEmail
-    //     ];
-    //     $request = $this->buildRequest($uri, 'PATCH', $body);
-    //     $this->execute($request);
-    // }
+    public function patchEmail(Ambassador $ambassador, string $newEmail)
+    {
+        $uri = self::AMBASSADORS_URL . "/$ambassador->enrolleeId";
+        $body = [
+            'email' => $newEmail
+        ];
+        $request = $this->buildRequest($uri , 'PUT', ['customer' => $body]);
+        $this->execute($request);
+    }
 
     protected function buildRequest(string $path, string $method = 'GET', $body = null): RequestInterface
     {

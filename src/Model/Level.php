@@ -10,9 +10,10 @@ class Level
     const LEVEL_4 = '4';
     const LEVEL_5 = '5';
 
-    public function __construct(
-        public string $level
-    )
+    public string $level;
+
+    public function __construct(string $level)
     {
+        $this->level = $level;
     }
 }

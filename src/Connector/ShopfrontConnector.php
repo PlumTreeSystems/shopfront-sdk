@@ -15,11 +15,15 @@ class ShopfrontConnector
     const AMBASSADORS_URL = '/rest/all/V2/shopfront/customers';
 
     private ClientInterface $client;
+    private string $host;
+    private string $apiKey;
 
     public function __construct(
-        private string $host,
-        private string $apiKey,
+        string $host,
+        string $apiKey
     ) {
+        $this->host = $host;
+        $this->apiKey = $apiKey;
         $this->client = new \GuzzleHttp\Client();
     }
 
@@ -77,8 +81,13 @@ class ShopfrontConnector
         if ($body) {
             $body = json_encode($body);
         }
-        $request = (new Request(method: $method, uri: $this->host . $path, body: $body))
-                    ->withAddedHeader('Authorization', 'Bearer ' . $this->apiKey);
+        $request = (new Request(
+            $method,
+            $this->host . $path,
+            [],
+            $body
+        ))
+            ->withAddedHeader('Authorization', 'Bearer ' . $this->apiKey);
         return $request;
     }
 

@@ -6,14 +6,24 @@ use AnnSummersCommon\Model\Enrollee;
 
 class Ambassador
 {
+    public string $enrolleeId;
+    public string $domain;
+    public string $email;
+    public string $firstName;
+    public string $lastName;
+
     public function __construct(
-        public string $enrollee_id,
-        public string $domain,
-        public string $email,
-        public string $first_name,
-        public string $last_name
-    )
-    {
+        string $enrolleeId,
+        string $domain,
+        string $email,
+        string $firstName,
+        string $lastName
+    ) {
+        $this->enrolleeId = $enrolleeId;
+        $this->domain = $domain;
+        $this->email = $email;
+        $this->firstName = $firstName;
+        $this->lastName = $lastName;
     }
 
     public static function fromEnrollee(Enrollee $enrollee): self

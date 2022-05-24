@@ -68,20 +68,6 @@ class ShopfrontConnector
         $this->execute($request);
     }
 
-    public function disableAmbassador(Ambassador $ambassador)
-    {
-        $uri = self::AMBASSADORS_URL . "/$ambassador->enrolleeId/disable";
-        $request = $this->buildRequest($uri, 'POST');
-        $this->execute($request);
-    }
-
-    public function enableAmbassador(Ambassador $ambassador)
-    {
-        $uri = self::AMBASSADORS_URL . "/$ambassador->enrolleeId/enable";
-        $request = $this->buildRequest($uri, 'POST', ['domain' => $ambassador->domain]);
-        $this->execute($request);
-    }
-
     protected function buildRequest(string $path, string $method = 'GET', $body = null): RequestInterface
     {
         if ($body) {

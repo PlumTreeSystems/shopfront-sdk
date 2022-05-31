@@ -12,6 +12,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 class ShopfrontConnector
 {
     const SALES_URL = '/rest/all/V2/shopfront/sales';
+    const RETURNS_URL = '/rest/all/V2/shopfront/returns';
     const AMBASSADORS_URL = '/rest/all/V2/shopfront/customers';
 
     private ClientInterface $client;
@@ -30,6 +31,16 @@ class ShopfrontConnector
     public function getSales(array $options): array
     {
         $uri = self::SALES_URL;
+        if (sizeof($options)) {
+            $uri .= '?' . http_build_query($options);
+        }
+        $request = $this->buildRequest($uri);
+        return $this->execute($request);
+    }
+
+    public function getReturns(array $options): array
+    {
+        $uri = self::RETURNS_URL;
         if (sizeof($options)) {
             $uri .= '?' . http_build_query($options);
         }

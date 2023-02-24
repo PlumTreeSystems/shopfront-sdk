@@ -2,7 +2,7 @@
 
 namespace ShopfrontSDK\Model;
 
-use AnnSummersCommon\Model\Enrollee;
+use PlumTreeCommon\Model\Enrollee;
 
 class Ambassador
 {

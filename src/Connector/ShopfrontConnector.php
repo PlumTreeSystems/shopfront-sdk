@@ -55,6 +55,13 @@ class ShopfrontConnector
         return $this->execute($request);
     }
 
+    public function updateAmbassador(Ambassador $ambassador)
+    {
+        $uri = self::AMBASSADORS_URL . "/$ambassador->enrolleeId";
+        $request = $this->buildRequest($uri, 'PUT', ['customer' => $ambassador]);
+        return $this->execute($request);
+    }
+
     public function setLevel(string $ambasadorId, Level $level)
     {
         $uri = self::AMBASSADORS_URL . "/$ambasadorId/levels";

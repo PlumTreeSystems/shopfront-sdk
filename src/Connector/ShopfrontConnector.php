@@ -14,6 +14,7 @@ class ShopfrontConnector
     const SALES_URL = '/rest/all/V2/shopfront/sales';
     const RETURNS_URL = '/rest/all/V2/shopfront/returns';
     const AMBASSADORS_URL = '/rest/all/V2/shopfront/customers';
+    const CUSTOMERS_SEARCH_URL = '/rest/all/V1/customers/search';
 
     private ClientInterface $client;
     private string $host;
@@ -84,6 +85,64 @@ class ShopfrontConnector
         ];
         $request = $this->buildRequest($uri, 'PUT', ['customer' => $body]);
         return $this->execute($request);
+    }
+
+    public function searchCustomers(array $searchCriteria)
+    {
+        $uri = self::CUSTOMERS_SEARCH_URL;
+        $queryParams = $this->buildSearchCriteria($searchCriteria);
+        if ($queryParams) {
+            $uri .= '?' . http_build_query($queryParams);
+        }
+
+        $request = $this->buildRequest($uri);
+        return $this->execute($request);
+    }
+
+    protected function buildSearchCriteria(array $params)
+    {
+        $query = [];
+
+        if (!sizeof($params)) {
+            return '';
+        }
+
+        if (isset($params['currentPage'])) {
+            $query['searchCriteria[currentPage]'] = $params['currentPage'];
+        }
+        if (isset($params['pageSize'])) {
+            $query['searchCriteria[pageSize]'] = $params['pageSize'];
+        }
+        if (isset($params['sortOrders'])) {
+            for ($i = 0; $i < sizeof($params['sortOrders']); $i++) {
+                if (isset($params['sortOrders'][$i]['direction']) && isset($params['sortOrders'][$i]['field'])) {
+                    $query["searchCriteria[sortOrders][$i][direction]"] = $params['sortOrders'][$i]['direction'];
+                    $query["searchCriteria[sortOrders][$i][field]"] = $params['sortOrders'][$i]['field'];
+                }
+            }
+        }
+        if (isset($params['filterGroups'])) {
+            for ($i = 0; $i < sizeof($params['filterGroups']); $i++) {
+                for ($j = 0; $j < sizeof($params['filterGroups'][$i]['filters']); $j++) {
+                    if (
+                        isset($params['filterGroups'][$i]['filters'][$j]['field'])
+                        && isset($params['filterGroups'][$i]['filters'][$j]['value'])
+                    ) {
+                        $query["searchCriteria[filterGroups][$i][filters][$j][field]"] =
+                            $params['filterGroups'][$i]['filters'][$j]['field'];
+                        $query["searchCriteria[filterGroups][$i][filters][$j][value]"] =
+                            $params['filterGroups'][$i]['filters'][$j]['value'];
+
+                        if (isset($params['filterGroups'][$i]['filters'][$j]['conditionType'])) {
+                            $query["searchCriteria[filterGroups][$i][filters][$j][conditionType]"] =
+                                $params['filterGroups'][$i]['filters'][$j]['conditionType'];
+                        }
+                    }
+                }
+            }
+        }
+
+        return $query;
     }
 
     protected function buildRequest(string $path, string $method = 'GET', $body = null): RequestInterface

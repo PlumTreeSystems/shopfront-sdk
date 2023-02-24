@@ -48,25 +48,25 @@ class ShopfrontConnector
         return $this->execute($request);
     }
 
-    public function createAmbassador(Ambassador $ambassador): void
+    public function createAmbassador(Ambassador $ambassador)
     {
         $uri = self::AMBASSADORS_URL;
         $request = $this->buildRequest($uri, 'POST', ['customer' => $ambassador]);
-        $this->execute($request);
+        return $this->execute($request);
     }
 
-    public function setLevel(string $ambasadorId, Level $level): void
+    public function setLevel(string $ambasadorId, Level $level)
     {
         $uri = self::AMBASSADORS_URL . "/$ambasadorId/levels";
         $request = $this->buildRequest($uri, 'POST', $level);
-        $this->execute($request);
+        return $this->execute($request);
     }
 
-    public function clearLevels(): void
+    public function clearLevels()
     {
         $uri = self::AMBASSADORS_URL . "/clear-levels";
         $request = $this->buildRequest($uri, 'POST');
-        $this->execute($request);
+        return $this->execute($request);
     }
 
     public function patchEmail(Ambassador $ambassador, string $newEmail)
@@ -76,7 +76,7 @@ class ShopfrontConnector
             'email' => $newEmail
         ];
         $request = $this->buildRequest($uri, 'PUT', ['customer' => $body]);
-        $this->execute($request);
+        return $this->execute($request);
     }
 
     protected function buildRequest(string $path, string $method = 'GET', $body = null): RequestInterface

@@ -7,6 +7,7 @@ use ShopfrontSDK\Model\Level;
 use GuzzleHttp\Psr7\Request;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestInterface;
+use ShopfrontSDK\Model\Event;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class ShopfrontConnector
@@ -14,6 +15,7 @@ class ShopfrontConnector
     const SALES_URL = '/rest/all/V2/shopfront/sales';
     const RETURNS_URL = '/rest/all/V2/shopfront/returns';
     const AMBASSADORS_URL = '/rest/all/V2/shopfront/customers';
+    const EVENTS_URL = '/rest/all/V2/shopfront/events';
     const CUSTOMERS_SEARCH_URL = '/rest/all/V1/customers/search';
 
     private ClientInterface $client;
@@ -74,6 +76,20 @@ class ShopfrontConnector
     {
         $uri = self::AMBASSADORS_URL . "/clear-levels";
         $request = $this->buildRequest($uri, 'POST');
+        return $this->execute($request);
+    }
+
+    public function createEvent(Event $event)
+    {
+        $uri = self::EVENTS_URL;
+        $request = $this->buildRequest($uri, 'POST', ['event' => $event]);
+        return $this->execute($request);
+    }
+
+    public function updateEvent(string $id, Event $event)
+    {
+        $uri = self::EVENTS_URL . "/$id";
+        $request = $this->buildRequest($uri, 'PUT', ['event' => $event]);
         return $this->execute($request);
     }
 

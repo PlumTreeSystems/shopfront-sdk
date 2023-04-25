@@ -2,7 +2,7 @@
 
 namespace ShopfrontSDK\Connector;
 
-use ShopfrontSDK\Model\Ambassador;
+use ShopfrontSDK\Model\Customer;
 use ShopfrontSDK\Model\Level;
 use GuzzleHttp\Psr7\Request;
 use Psr\Http\Client\ClientInterface;
@@ -14,7 +14,7 @@ class ShopfrontConnector
 {
     const SALES_URL = '/rest/all/V2/shopfront/sales';
     const RETURNS_URL = '/rest/all/V2/shopfront/returns';
-    const AMBASSADORS_URL = '/rest/all/V2/shopfront/customers';
+    const CUSTOMERS_URL = '/rest/all/V2/shopfront/customers';
     const EVENTS_URL = '/rest/all/V2/shopfront/events';
     const CUSTOMERS_SEARCH_URL = '/rest/all/V1/customers/search';
 
@@ -51,30 +51,30 @@ class ShopfrontConnector
         return $this->execute($request);
     }
 
-    public function createAmbassador(Ambassador $ambassador)
+    public function createCustomer(Customer $customer)
     {
-        $uri = self::AMBASSADORS_URL;
-        $request = $this->buildRequest($uri, 'POST', ['customer' => $ambassador]);
+        $uri = self::CUSTOMERS_URL;
+        $request = $this->buildRequest($uri, 'POST', ['customer' => $customer]);
         return $this->execute($request);
     }
 
-    public function updateAmbassador(Ambassador $ambassador)
+    public function updateCustomer(Customer $customer)
     {
-        $uri = self::AMBASSADORS_URL . "/$ambassador->enrolleeId";
-        $request = $this->buildRequest($uri, 'PUT', ['customer' => $ambassador]);
+        $uri = self::CUSTOMERS_URL . "/$customer->enrolleeId";
+        $request = $this->buildRequest($uri, 'PUT', ['customer' => $customer]);
         return $this->execute($request);
     }
 
-    public function setLevel(string $ambasadorId, Level $level)
+    public function setLevel(string $enrolleeId, Level $level)
     {
-        $uri = self::AMBASSADORS_URL . "/$ambasadorId/levels";
+        $uri = self::CUSTOMERS_URL . "/$enrolleeId/levels";
         $request = $this->buildRequest($uri, 'POST', $level);
         return $this->execute($request);
     }
 
     public function clearLevels()
     {
-        $uri = self::AMBASSADORS_URL . "/clear-levels";
+        $uri = self::CUSTOMERS_URL . "/clear-levels";
         $request = $this->buildRequest($uri, 'POST');
         return $this->execute($request);
     }
@@ -93,9 +93,9 @@ class ShopfrontConnector
         return $this->execute($request);
     }
 
-    public function patchEmail(Ambassador $ambassador, string $newEmail)
+    public function patchEmail(Customer $customer, string $newEmail)
     {
-        $uri = self::AMBASSADORS_URL . "/$ambassador->enrolleeId";
+        $uri = self::CUSTOMERS_URL . "/$customer->enrolleeId";
         $body = [
             'email' => $newEmail
         ];

@@ -9,10 +9,10 @@ class Event
     public function __construct(
         public string $eventCode,
         public string $title,
-        public \DateTime $eventDateFrom,
-        public \DateTime $eventDateTo,
-        public \DateTime $campaignDateFrom,
-        public \DateTime $campaignDateTo,
+        public string $eventDateFrom,
+        public string $eventDateTo,
+        public string $campaignDateFrom,
+        public string $campaignDateTo,
         public bool $isCancelled
     ) {
     }
@@ -22,10 +22,10 @@ class Event
         return new self(
             $event->eventCode,
             $event->title,
-            $event->eventDateFrom,
-            $event->eventDateTo,
-            $event->campaignDateFrom,
-            $event->campaignDateTo,
+            $event->eventDateFrom->format(\DateTimeInterface::ATOM),
+            $event->eventDateTo->format(\DateTimeInterface::ATOM),
+            $event->campaignDateFrom->format(\DateTimeInterface::ATOM),
+            $event->campaignDateTo->format(\DateTimeInterface::ATOM),
             $event->canceled,
         );
     }

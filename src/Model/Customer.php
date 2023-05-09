@@ -28,7 +28,7 @@ class Customer
             $enrollee->profile->lastName ?? '',
             $enrollee->disabled,
             [
-                'city' => $enrollee->profile->town ?? '-',
+                'city' => !empty($enrollee->profile->town) ? $enrollee->profile->town : '-',
                 'country_id' => CountryMapHelper::getMappedCountries()[strtoupper($enrollee->profile->country)],
                 'postcode' => $enrollee->profile->postcode,
                 'street' => [$enrollee->profile->address],

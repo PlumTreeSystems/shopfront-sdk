@@ -14,6 +14,7 @@ class Customer
         public string $firstName,
         public string $lastName,
         public bool $disable,
+        public bool $suspend,
         public array $address
     ) {
     }
@@ -27,6 +28,7 @@ class Customer
             $enrollee->profile->firstName ?? '',
             $enrollee->profile->lastName ?? '',
             $enrollee->disabled,
+            $enrollee->suspended,
             [
                 'city' => !empty($enrollee->profile->town) ? $enrollee->profile->town : '-',
                 'country_id' => CountryMapHelper::getMappedCountries()[strtoupper($enrollee->profile->country)],

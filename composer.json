@@ -2,7 +2,7 @@
     "name": "pts/shopfront-sdk",
     "description": "This package contains SDK connector for Shopfront",
     "type": "library",
-    "version": "1.2.4",
+    "version": "1.2.5",
     "require": {
         "php": "^7.4 || ^8.0",
         "ext-json": "*",
